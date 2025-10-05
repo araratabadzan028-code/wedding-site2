@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Свадьба Карена и Дианы | Wedding of Karen and Diana</title>
+    <style>
+        /* Сброс стилей */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Анимации */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Кнопка переключения языка */
+        .language-switcher {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+
+        .lang-btn {
+            padding: 8px 16px;
+            background-color: #a65c3c;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(166, 92, 60, 0.3);
+            font-size: 14px;
+        }
+
+        .lang-btn:hover {
+            background-color: #7a3f28;
+            transform: translateY(-2px);
+        }
+
+        /* Стили для контента на разных языках */
+        .lang-ru {
+            display: none;
+        }
+
+        .lang-hy {
+            display: block;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #fff8f0;
+            color: #3e2f25;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow-x: hidden;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 0.1s forwards;
+
+            background-image:
+                radial-gradient(circle, #e6cbb3 1px, transparent 1px),
+                radial-gradient(circle, #e6cbb3 1px, transparent 1px);
+            background-position: 0 0, 15px 15px;
+            background-size: 30px 30px;
+        }
+
+        /* Боковые панели с цветами - скрываем на мобильных */
+        .left-flowers,
+        .right-flowers {
+            position: fixed;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            z-index: -1;
+            opacity: 0;
+            background-repeat: repeat-y;
+            background-size: 200px 150px;
+            animation: fadeIn 1.5s ease-out 0.3s forwards;
+        }
+
+        .left-flowers {
+            left: 0;
+            background-image: 
+                url("data:image/svg+xml,%3Csvg width='200' height='150' viewBox='0 0 200 150' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23d9a8a8'/%3E%3Cstop offset='100%25' stop-color='%23f0d9c3'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M100 20c-15 0-30 10-30 25s15 25 30 25 30-10 30-25-15-25-30-25z' fill='url(%23a)'/%3E%3Ccircle cx='100' cy='45' r='8' fill='%23e6cbb3'/%3E%3Cpath d='M100 80c-10 0-20 8-20 18s10 18 20 18 20-8 20-18-10-18-20-18z' fill='url(%23a)'/%3E%3Ccircle cx='100' cy='98' r='5' fill='%23e6cbb3'/%3E%3Cpath d='M50 120c-8 0-15 6-15 14s7 14 15 14 15-6 15-14-7-14-15-14z' fill='%23d9a8a8'/%3E%3Ccircle cx='50' cy='134' r='3' fill='%23f0d9c3'/%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .right-flowers {
+            right: 0;
+            background-image: 
+                url("data:image/svg+xml,%3Csvg width='200' height='150' viewBox='0 0 200 150' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='b' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23f0d9c3'/%3E%3Cstop offset='100%25' stop-color='%23d9a8a8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M100 30c15 0 30-10 30-25s-15-25-30-25-30 10-30 25 15 25 30 25z' fill='url(%23b)' transform='rotate(180 100 30)'/%3E%3Ccircle cx='100' cy='55' r='8' fill='%23e6cbb3'/%3E%3Cpath d='M100 90c10 0 20-8 20-18s-10-18-20-18-20 8-20 18 10 18 20 18z' fill='url(%23b)' transform='rotate(180 100 90)'/%3E%3Ccircle cx='100' cy='72' r='5' fill='%23e6cbb3'/%3E%3Cpath d='M150 110c8 0 15-6 15-14s-7-14-15-14-15 6-15 14 7 14 15 14z' fill='%23d9a8a8' transform='rotate(180 150 110)'/%3E%3Ccircle cx='150' cy='96' r='3' fill='%23f0d9c3'/%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        header {
+            background-color: #f7e6d7;
+            padding: 40px 20px 50px;
+            text-align: center;
+            border-bottom: 3px solid #d9bba0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            position: relative;
+            z-index: 1;
+        }
+
+        header h1 {
+            font-family: 'Georgia', serif;
+            font-size: 2.5rem;
+            color: #a65c3c;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.4s forwards;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            color: #7a4a2e;
+            font-style: italic;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.6s forwards;
+        }
+
+        main {
+            max-width: 960px;
+            margin: 30px auto 50px;
+            padding: 0 15px;
+            flex-grow: 1;
+            position: relative;
+            z-index: 1;
+        }
+
+        section {
+            margin-bottom: 50px;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        /* Последовательное появление секций */
+        section:nth-child(1) { animation-delay: 0.8s; }
+        section:nth-child(2) { animation-delay: 1.0s; }
+        section:nth-child(3) { animation-delay: 1.2s; }
+        section:nth-child(4) { animation-delay: 1.4s; }
+
+        h2 {
+            font-family: 'Georgia', serif;
+            font-size: 2rem;
+            color: #a65c3c;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #d9bba0;
+            padding-bottom: 6px;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+
+        .text-block {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #5a3a21;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Галерея */
+        .photo-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .gallery-photo {
+            width: 100%;
+            max-width: 300px;
+            height: 200px;
+            object-fit: cover;
+            border: 2px solid #a65c3c;
+            border-radius: 8px;
+            transition: all 0.4s ease;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease-out forwards;
+            cursor: pointer;
+        }
+
+        /* Увеличение при наведении */
+        .gallery-photo:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 25px rgba(166, 92, 60, 0.4);
+            z-index: 10;
+            position: relative;
+        }
+
+        /* Появление фото с задержкой */
+        .gallery-photo:nth-child(1) { animation-delay: 1.2s; }
+        .gallery-photo:nth-child(2) { animation-delay: 1.4s; }
+        .gallery-photo:nth-child(3) { animation-delay: 1.6s; }
+        .gallery-photo:nth-child(4) { animation-delay: 1.8s; }
+
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 1;
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+            animation: zoomIn 0.3s ease;
+        }
+
+        .modal-image {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 10px;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Кнопка закрытия */
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1001;
+            transition: all 0.3s ease;
+            background: rgba(166, 92, 60, 0.8);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+        }
+
+        .close-btn:hover {
+            background: #a65c3c;
+            transform: scale(1.1);
+        }
+
+        /* Программа */
+        .schedule-list {
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #5a3a21;
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .schedule-list li {
+            margin-bottom: 12px;
+            padding-left: 20px;
+            position: relative;
+            opacity: 0;
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+
+        /* Появление пунктов списка по очереди */
+        .schedule-list li:nth-child(1) { animation-delay: 1.6s; }
+        .schedule-list li:nth-child(2) { animation-delay: 1.7s; }
+
+        .schedule-list li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #a65c3c;
+            font-size: 1.3rem;
+            line-height: 1;
+            top: 1px;
+        }
+
+        /* Информация о гостях */
+        .guests-info {
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #5a3a21;
+            line-height: 1.6;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 1.8s forwards;
+        }
+
+        /* Кнопки карт */
+        .map-btn {
+            display: inline-block;
+            padding: 12px 20px;
+            background-color: #a65c3c;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            margin: 10px 0;
+            transition: background-color 0.3s ease;
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        .map-btn:hover {
+            background-color: #7a3f28;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px 15px;
+            font-size: 0.9rem;
+            color: #a65c3c;
+            border-top: 1px solid #d9bba0;
+            background-color: #f7e6d7;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 2s forwards;
+        }
+
+        /* Стили для iframe */
+        .form-container {
+            width: 100%;
+            max-width: 640px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .form-container iframe {
+            width: 100%;
+            height: 500px;
+            border: 2px solid #d9bba0;
+            border-radius: 10px;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 2s forwards;
+        }
+
+        /* Адаптивность для мобильных */
+        @media (max-width: 768px) {
+            .left-flowers,
+            .right-flowers {
+                display: none;
+            }
+            
+            .language-switcher {
+                top: 10px;
+                right: 10px;
+            }
+            
+            .lang-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+            
+            header {
+                padding: 30px 15px 40px;
+            }
+            
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            header p {
+                font-size: 1rem;
+            }
+            
+            main {
+                margin: 20px auto 40px;
+                padding: 0 10px;
+            }
+            
+            section {
+                margin-bottom: 40px;
+            }
+            
+            h2 {
+                font-size: 1.6rem;
+                margin-bottom: 15px;
+            }
+            
+            .text-block {
+                font-size: 1rem;
+                line-height: 1.5;
+            }
+            
+            .photo-gallery {
+                gap: 10px;
+            }
+            
+            .gallery-photo {
+                max-width: 100%;
+                height: 180px;
+            }
+            
+            .gallery-photo:hover {
+                transform: scale(1.05);
+            }
+            
+            .close-btn {
+                top: 10px;
+                right: 15px;
+                font-size: 30px;
+                width: 40px;
+                height: 40px;
+            }
+            
+            .schedule-list {
+                font-size: 1rem;
+            }
+            
+            .schedule-list li {
+                margin-bottom: 10px;
+            }
+            
+            .guests-info {
+                font-size: 1rem;
+            }
+            
+            .map-btn {
+                padding: 10px 16px;
+                font-size: 0.9rem;
+                display: block;
+                margin: 10px auto;
+            }
+            
+            .form-container iframe {
+                height: 400px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+            
+            h2 {
+                font-size: 1.4rem;
+            }
+            
+            .gallery-photo {
+                height: 160px;
+            }
+            
+            .close-btn {
+                top: 5px;
+                right: 10px;
+                font-size: 25px;
+                width: 35px;
+                height: 35px;
+            }
+            
+            .form-container iframe {
+                height: 350px;
+            }
+        }
+
+        /* Для очень маленьких экранов */
+        @media (max-width: 360px) {
+            header h1 {
+                font-size: 1.6rem;
+            }
+            
+            .lang-btn {
+                padding: 5px 10px;
+                font-size: 11px;
+            }
+            
+            .gallery-photo {
+                height: 140px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Кнопка переключения языка -->
+    <div class="language-switcher">
+        <button class="lang-btn" onclick="switchLanguage('hy')">ՀՅ</button>
+        <button class="lang-btn" onclick="switchLanguage('ru')">РУ</button>
+    </div>
+
+    <!-- Боковые панели с цветами -->
+    <div class="left-flowers"></div>
+    <div class="right-flowers"></div>
+
+    <!-- Модальное окно для фотографий -->
+    <div class="modal" id="imageModal">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <div class="modal-content">
+            <img class="modal-image" id="modalImage" src="" alt="">
+        </div>
+    </div>
+
+    <header>
+        <!-- Армянская версия -->
+        <div class="lang-hy">
+            <h1>Կարեն և Դիանա</h1>
+            <p><br>16.10.2025</p>
+            <p>Հարգելի հարազատներ, հրավիրում ենք Ձեզ մեր հարսանեկան հանդիսությանը</p>
+            <section>
+                <h2></h2>
+                <p class="guests-info">
+                    Աստված օրհնեց նրանց և Աստված ասաց նրանց. «Աճեցե՛ք, բազմացե՛ք և լցրե՛ք երկիրն ու տիրեցե՛ք դրան. իշխե՛ք ծովի ձկների, երկնքի թռչունների վրա ու երկրի վրա սողացող բոլոր կենդանիների վրա»։ 
+                </p>
+                <p>ԾՆՆԴՈՑ 1:28</p>
+            </section>
+        </div>
+        
+        <!-- Русская версия -->
+        <div class="lang-ru">
+            <h1>Карен и Диана</h1>
+            <p><br>16.10.2025</p>
+            <p>Дорогие родные и близкие, приглашаем вас на нашу свадебную церемонию</p>
+            <section>
+                <h2></h2>
+                <p class="guests-info">
+                    Бог благословил их и сказал им: «Плодитесь и размножайтесь, и наполняйте землю, и обладайте ею, и владычествуйте над рыбами морскими, и над птицами небесными, и над всяким животным, пресмыкающимся по земле».
+                </p>
+                <p>БЫТИЕ 1:28</p>
+            </section>
+        </div>
+    </header>
+
+    <main>
+        <section>
+            <div class="lang-hy">
+                <h2>Պատկերասրահ</h2>
+            </div>
+            <div class="lang-ru">
+                <h2>Галерея</h2>
+            </div>
+            
+            <div class="photo-gallery">
+                <img src="photos/photo1.jpg" alt="Фото 1" class="gallery-photo" onclick="openModal(this)">
+                <img src="photos/photo2.jpg" alt="Фото 2" class="gallery-photo" onclick="openModal(this)">
+				<img src="photos/photo3.jpg" alt="Фото 3" class="gallery-photo" onclick="openModal(this)">
+                <img src="photos/photo4.jpg" alt="Фото 4" class="gallery-photo" onclick="openModal(this)">
+            </div>
+        </section>
+
+        <section>
+            <div class="lang-hy">
+                <h2>Հանդիպման վայրը</h2>
+                
+                <div class="text-block">
+                    <p style="margin: 15px 0; font-size: 1.1rem; font-weight: 500; line-height: 1.6; text-align: center;">
+                        ՀԱՐԳԵԼԻ ՀԱՐԱԶԱՏՆԵՐ</p> 
+						<p>Սիրով հրավիրում ենք Ձեզ մասնակցելու մեր պսակադրությանը,որը տեղի կունենա 《Երազ 》ռեստորանի տարածքում 2025 թ. հոկտեմբերի 16-ին 15:00-ին։
+                    </p>
+                    <img src="photos/photo7.jpg" alt="Фото ресторана" class="gallery-photo" onclick="openModal(this)">
+                    
+                    <p style="margin: 15px 0; font-size: 1.1rem; font-weight: 500; text-align: center;">Երևան, Թբիլիսյան խճուղի 1/8</p>
+                    
+                    <div style="text-align: center; margin: 20px 0;">
+                        <a href="https://maps.app.goo.gl/f9QGKkXHb1iLWp3X7" target="_blank" class="map-btn">
+                            🗺️ Բացեք Google Քարտեզներում
+                        </a>
+                    </div>
+
+                    <p style="margin: 15px 0; font-size: 1.1rem; font-weight: 500; text-align: center;">Հարսանյաց հանդեսը կկայանա 《Վիլլա》ռեստորանային համալիրում 17:00-ին։</p>
+                    
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 20px 0;">
+                    <img src="photos/photo5.jpg" alt="Фото 5" class="gallery-photo" onclick="openModal(this)">
+                    <img src="photos/photo6.jpg" alt="Фото 6" class="gallery-photo" onclick="openModal(this)">
+                    </div>
+                    
+                    <p style="margin: 15px 0; font-size: 1.1rem; font-weight: 500; line-height: 1.6; text-align: center;">
+                        Կոտայքի մարզ, Ջրվեժ համայնք, 15-րդ փողոց, 10/2 շենք
+                    </p>
+                    
+                    <div style="text-align: center; margin: 20px 0;">
+                        <a href="https://maps.app.goo.gl/TFHxdFTqebZKxb2j8" target="_blank" class="map-btn">
+                            🗺️ Բացեք Google Քարտեզներում
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lang-ru">
+                <h2>Место проведения</h2>
+                
+                <div class="text-block">
+                    <p style="margin: 15px 0; font-size: 1.1rem; font-weight: 500; line-height: 1.6; text-align: center;">
+                        ДОРОГИЕ РОДНЫЕ И БЛИЗКИЕ! С любовью приглашаем Вас на нашу свадебную церемонию, которая состоится в ресторане "Ераз" 16 октября 2025 года в 15:00.
+                    </p>
+                    <img src="photos/photo7.jpg" alt="Фото ресторана" class="gallery-photo" onclick="openModal(this)">
+                    
+                    <p style="margin: 15px 0; font-size: 1.1rem; font-weight: 500; text-align: center;">Ереван, Тбилисское шоссе 1/8</p>
+                    
+                    <div style="text-align: center; margin: 20px 0;">
+                        <a href="https://maps.app.goo.gl/f9QGKkXHb1iLWp3X7" target="_blank" class="map-btn">
+                            🗺️ Открыть в Google Картах
+                        </a>
+                    </div>
+
+                    <p style="margin: 15px 0; font-size: 1.1rem; font-weight: 500; text-align: center;">Свадебный банкет состоится в ресторанном комплексе "Вилла" в 17:00.</p>
+                    
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 20px 0;">
+                        <img src="photos/photo5.jpg" alt="Фото 5" class="gallery-photo" onclick="openModal(this)">
+                    <img src="photos/photo6.jpg" alt="Фото 6" class="gallery-photo" onclick="openModal(this)">
+                    </div>
+                    
+                    <p style="margin: 15px 0; font-size: 1.1rem; font-weight: 500; line-height: 1.6; text-align: center;">
+                        Котайкская область, община Джрвеж, 15-я улица, здание 10/2
+                    </p>
+                    
+                    <div style="text-align: center; margin: 20px 0;">
+                        <a href="https://maps.app.goo.gl/TFHxdFTqebZKxb2j8" target="_blank" class="map-btn">
+                            🗺️ Открыть в Google Картах
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="lang-hy">
+                <h2>Ծրագիր</h2>
+                <ul class="schedule-list">
+                    <li>15:00 -ին կկայանա պսակադրությունը Երազ ռեստորանի տարածքում</li>
+                    <li>17:00 -ին հարսանեկան հանդեսը կկայանա Վիլլա ռեստորանում</li>
+                </ul>
+            </div>
+            
+            <div class="lang-ru">
+                <h2>Программа</h2>
+                <ul class="schedule-list">
+                    <li>15:00 - Свадебная церемония в ресторане "Ераз"</li>
+                    <li>17:00 - Свадебный банкет в ресторане "Вилла"</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <div class="lang-hy">
+                <h2>Հաստատեք Ձեր ներկայությունը</h2>
+            </div>
+            <div class="lang-ru">
+                <h2>Подтвердите Ваше присутствие</h2>
+            </div>
+            
+            <div class="form-container">
+                <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScEyTxXa0U_zRyAFnxO8hKW7c8KWKQPHYRGxFQOYH8RNljPmQ/viewform?embedded=true" frameborder="0" marginheight="0" marginwidth="0">Загрузка…</iframe>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="lang-hy">
+            &copy; 2025 Կարեն & Դիանա
+        </div>
+        <div class="lang-ru">
+            &copy; 2025 Карен & Диана
+        </div>
+    </footer>
+
+    <script>
+        // Функция переключения языка
+        function switchLanguage(lang) {
+            document.querySelectorAll('.lang-ru, .lang-hy').forEach(el => {
+                el.style.display = 'none';
+            });
+            
+            document.querySelectorAll('.lang-' + lang).forEach(el => {
+                el.style.display = 'block';
+            });
+            
+            localStorage.setItem('preferred-language', lang);
+        }
+
+        // Функции для модального окна
+        function openModal(img) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            modalImg.src = img.src;
+            modalImg.alt = img.alt;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('imageModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Закрытие модального окна при клике вне изображения
+        document.getElementById('imageModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Закрытие модального окна клавишей ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // При загрузке страницы проверяем сохраненный язык
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedLang = localStorage.getItem('preferred-language') || 'hy';
+            switchLanguage(savedLang);
+        });
+    </script>
+</body>
+</html>
